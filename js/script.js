@@ -10,8 +10,8 @@
    -------------------------------------------------------------------------- */
 const CONFIG = {
   github: "https://github.com/SantiagovillamizarM",
-  linkedin: "https://www.linkedin.com/in/TU-USUARIO-LINKEDIN", // PLACEHOLDER
-  email: "TU-CORREO@ejemplo.com"                              // PLACEHOLDER
+  linkedin: "https://www.linkedin.com/in/santiago-villamizar-mantilla-9103253a9/",
+  email: "villamizarmantillasantigo@gmail.com"
 };
 
 const isPlaceholder = (value) => !value || value.includes("TU-");
@@ -50,6 +50,8 @@ const translations = {
       description: "Desarrollador junior enfocado en crear soluciones funcionales, aprender tecnologías nuevas y enfrentar problemas complejos con adaptación y determinación.",
       ctaProjects: "Ver proyectos",
       ctaContact: "Contactarme",
+      cvDownload: "Descargar hoja de vida",
+      cvDownloadAts: "Descargar hoja de vida ATS",
       chip1: "Web + Escritorio",
       chip2: "Mentalidad de crecimiento",
       scroll: "Desliza"
@@ -241,7 +243,7 @@ const translations = {
         message: "Mensaje",
         messagePh: "Cuéntame sobre tu idea…",
         submit: "Enviar mensaje",
-        note: "Al enviar se abrirá tu aplicación de correo con el mensaje listo. Este sitio no almacena ningún dato.",
+        note: "Tu mensaje me llegará directamente al correo. Te responderé lo antes posible.",
         subject: "Contacto desde el portafolio",
         bodyFrom: "De",
         errors: {
@@ -250,7 +252,9 @@ const translations = {
           message: "El mensaje debe tener al menos 10 caracteres."
         },
         status: {
-          opening: "Abriendo tu aplicación de correo…",
+          sending: "Enviando mensaje…",
+          success: "¡Mensaje enviado! Gracias por escribirme.",
+          error: "No se pudo enviar el mensaje. Inténtalo de nuevo o escríbeme a mi correo.",
           notConfigured: "El correo de contacto aún no está configurado. Mientras tanto, puedes encontrarme en GitHub."
         }
       }
@@ -292,6 +296,8 @@ const translations = {
       description: "Junior developer focused on building functional solutions, learning new technologies and tackling complex problems with adaptability and determination.",
       ctaProjects: "View projects",
       ctaContact: "Contact me",
+      cvDownload: "Download resume",
+      cvDownloadAts: "Download ATS resume",
       chip1: "Web + Desktop",
       chip2: "Growth mindset",
       scroll: "Scroll"
@@ -483,7 +489,7 @@ const translations = {
         message: "Message",
         messagePh: "Tell me about your idea…",
         submit: "Send message",
-        note: "Submitting will open your email app with the message ready. This site doesn't store any data.",
+        note: "Your message will reach my inbox directly. I'll reply as soon as possible.",
         subject: "Contact from portfolio",
         bodyFrom: "From",
         errors: {
@@ -492,7 +498,9 @@ const translations = {
           message: "The message must be at least 10 characters long."
         },
         status: {
-          opening: "Opening your email app…",
+          sending: "Sending message…",
+          success: "Message sent! Thanks for reaching out.",
+          error: "The message couldn't be sent. Please try again or email me directly.",
           notConfigured: "The contact email hasn't been configured yet. In the meantime, you can find me on GitHub."
         }
       }
@@ -1032,7 +1040,7 @@ function initCardEffects() {
 }
 
 /* --------------------------------------------------------------------------
-   Formulario de contacto (mailto, sin backend)
+   Formulario de contacto (envío con Web3Forms)
    -------------------------------------------------------------------------- */
 function initContactForm() {
   const form = $("#contact-form");
@@ -1072,7 +1080,7 @@ function initContactForm() {
     });
   });
 
-  form.addEventListener("submit", (e) => {
+  form.addEventListener("submit", async (e) => {
     e.preventDefault();
     status.classList.remove("is-error");
 
@@ -1084,20 +1092,32 @@ function initContactForm() {
       return;
     }
 
-    if (isPlaceholder(CONFIG.email)) {
-      status.classList.add("is-error");
-      setMessage(status, "contact.form.status.notConfigured");
-      return;
-    }
-
     const name = fields.name.input.value.trim();
     const email = fields.email.input.value.trim();
     const message = fields.message.input.value.trim();
-    const subject = `${t("contact.form.subject")} — ${name}`;
-    const body = `${message}\n\n${t("contact.form.bodyFrom")}: ${name} <${email}>`;
+    const submitBtn = form.querySelector('button[type="submit"]');
 
-    setMessage(status, "contact.form.status.opening");
-    window.location.href = `mailto:${CONFIG.email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+    const payload = new FormData(form);
+    payload.set("subject", `${t("contact.form.subject")} — ${name}`);
+    payload.set("from_name", name);
+    payload.set("replyto", email);
+    payload.set("message", message);
+
+    submitBtn.disabled = true;
+    setMessage(status, "contact.form.status.sending");
+
+    try {
+      const res = await fetch("https://api.web3forms.com/submit", { method: "POST", body: payload });
+      const data = await res.json();
+      if (!res.ok || !data.success) throw new Error(data.message || "Web3Forms error");
+      setMessage(status, "contact.form.status.success");
+      form.reset();
+    } catch (err) {
+      status.classList.add("is-error");
+      setMessage(status, "contact.form.status.error");
+    } finally {
+      submitBtn.disabled = false;
+    }
   });
 }
 

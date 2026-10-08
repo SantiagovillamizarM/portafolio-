@@ -25,6 +25,7 @@
     <symbol id="i-mail" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2.5"/><path d="m4 7 8 6 8-6"/></g></symbol>
     <symbol id="i-arrow" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M5 12h14M13 6l6 6-6 6"/></symbol>
     <symbol id="i-spark" viewBox="0 0 24 24"><path fill="currentColor" d="M12 2l1.7 7.3L21 12l-7.3 1.7L12 22l-1.7-8.3L3 12l7.3-2.7z"/></symbol>
+    <symbol id="i-download" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" d="M12 4v11M7 10l5 5 5-5M5 20h14"/></symbol>
     <symbol id="i-send" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" d="M21 3 10 14M21 3l-7 18-4-7-7-4z"/></symbol>
     <symbol id="i-shield" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" d="M12 3l7.5 3v5.5c0 4.6-3.2 8.3-7.5 9.5-4.3-1.2-7.5-4.9-7.5-9.5V6z"/></symbol>
     <symbol id="i-user" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="8" r="4"/><path d="M4.5 20.5c1.3-3.6 4.2-5.5 7.5-5.5s6.2 1.9 7.5 5.5"/></g></symbol>
@@ -109,6 +110,17 @@
             <a href="https://github.com/SantiagovillamizarM" class="link-arrow" data-link="github" target="_blank" rel="noopener noreferrer">
               <svg class="link-arrow__gh" aria-hidden="true"><use href="#i-github"></use></svg>
               GitHub <span class="link-arrow__arrow" aria-hidden="true">→</span>
+            </a>
+          </div>
+
+          <div class="hero__cv anim-in" style="--d: .96s">
+            <a href="pdf/Hoja%20de%20vida%20-%20Santiago%20Villamizar.pdf" class="cv-btn" download="Hoja de vida - Santiago Villamizar.pdf">
+              <span class="cv-btn__icon"><svg aria-hidden="true"><use href="#i-download"></use></svg></span>
+              <span data-i18n="hero.cvDownload">Descargar hoja de vida</span>
+            </a>
+            <a href="pdf/Hoja%20de%20vida%20ATS.pdf" class="cv-btn cv-btn--ats" download="Hoja de vida ATS - Santiago Villamizar.pdf">
+              <span class="cv-btn__icon"><svg aria-hidden="true"><use href="#i-download"></use></svg></span>
+              <span data-i18n="hero.cvDownloadAts">Descargar hoja de vida ATS</span>
             </a>
           </div>
         </div>
@@ -636,6 +648,8 @@
         </div>
 
         <form class="contact-form reveal" id="contact-form" style="--d: .12s" novalidate>
+          <input type="hidden" name="access_key" value="76384bbb-120d-46a5-aea6-e467362bb591">
+          <input type="checkbox" name="botcheck" class="visually-hidden" tabindex="-1" autocomplete="off" aria-hidden="true" style="display:none">
           <div class="contact-form__head">
             <p class="contact-form__title" data-i18n="contact.form.title">Envíame un mensaje</p>
             <span class="contact-form__dots" aria-hidden="true"><span></span><span></span><span></span></span>
@@ -665,7 +679,7 @@
             <span data-i18n="contact.form.submit">Enviar mensaje</span>
           </button>
 
-          <p class="contact-form__note" data-i18n="contact.form.note">Al enviar se abrirá tu aplicación de correo con el mensaje listo. Este sitio no almacena ningún dato.</p>
+          <p class="contact-form__note" data-i18n="contact.form.note">Tu mensaje me llegará directamente al correo. Te responderé lo antes posible.</p>
           <p class="contact-form__status" id="cf-status" role="status" aria-live="polite"></p>
         </form>
       </div>
